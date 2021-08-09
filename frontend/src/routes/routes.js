@@ -1,33 +1,25 @@
 import Blocks from "../components/Blocks/Blocks";
+import Todos from "../components/Todos/Todos";
 
 const routes = [
    {
         enabled: true,
-        path: "/dashboard",
-        link: "/dashboard",
-        title:"Dashboard",
-        component: Blocks,
-        iconClass: "las la-blocks",
-        navbar: "dashboard",
+        path: "/task1",
+        link: "/task1",
+        title:"Task 1",
+        component: Todos,
+        iconClass: "las la-list-ol",
+        navbar: "task1",
         child: null
     }, {
-        enabled: false,
-        path: "/Projects",
-        title:"Projects",
-        component: 'DataTable',
-        link: "/Projects",
-        iconClass: "las la-clipboard-list",
-        navbar: "Projects",
-        child: [
-            {
-                name: "Basic Map",
-                path: "/projects/basic",
-            },
-            {
-                name: "Markers",
-                path: "/projects/markers",
-            },
-        ]
+        enabled: true,
+        path: "/task2",
+        link: "/task2",
+        title:"Task 2",
+        component: Blocks,
+        iconClass: "las la-list-alt",
+        navbar: "Task 2",
+        child: null
     }
 ];
 export default routes.filter((route) => route.enabled);

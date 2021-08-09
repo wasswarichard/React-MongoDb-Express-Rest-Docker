@@ -11,7 +11,7 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <div className="sidebar-brand">
-                <h2><span className="lab la-accusoft"></span> <span>Nuri</span></h2>
+                <h2><span className="lab la-accusoft"/> <span>Todo</span></h2>
             </div>
             <div className="sidebar-menu">
                 <ul>
