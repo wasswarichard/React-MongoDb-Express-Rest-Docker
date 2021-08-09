@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<div
+  className="main-content"
+>
+  <main>
+    <div>
+      <div
+        className="row"
+      >
+        <div
+          className="col-md-6"
+        >
+          <nav>
+            <ul
+              className="pagination"
+            />
+          </nav>
+        </div>
+      </div>
+      <div
+        style={
+          Object {
+            "overflow": "auto",
+          }
+        }
+      >
+        <table
+          cellSpacing="0"
+          className="table table-striped table-bordered table-sm"
+          id="dtBasicExample"
+          width="50%"
+        >
+          <thead>
+            <tr>
+              <th>
+                Hash
+              </th>
+              <th>
+                Height
+              </th>
+              <th>
+                Time
+              </th>
+              <th>
+                Block Index
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td
+                className="th-sm"
+              >
+                <input
+                  className="form-control"
+                  placeholder="Hash"
+                  rk-model="hash"
+                  style={
+                    Object {
+                      "width": "200px",
+                    }
+                  }
+                  type="input"
+                />
+              </td>
+              <td
+                className="th-sm"
+              >
+                <input
+                  className="form-control"
+                  placeholder="Height"
+                  rk-model="height"
+                  style={
+                    Object {
+                      "width": "200px",
+                    }
+                  }
+                  type="input"
+                />
+              </td>
+              <td
+                className="th-sm"
+              >
+                <input
+                  className="form-control"
+                  placeholder="Time"
+                  rk-model="time"
+                  style={
+                    Object {
+                      "width": "200px",
+                    }
+                  }
+                  type="date"
+                />
+              </td>
+              <td
+                className="th-sm"
+              >
+                <input
+                  className="form-control"
+                  placeholder="Block Index"
+                  rk-model="block_index"
+                  style={
+                    Object {
+                      "width": "200px",
+                    }
+                  }
+                  type="input"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+`;
