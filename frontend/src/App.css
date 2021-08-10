@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap");
-/*@import url("navigation.css");*/
+
 :root {
     --main-color: #1b4053;
     --color-dark: #1D2231;
@@ -24,7 +24,7 @@
 main {
     margin-top: 10px;
     padding: 2rem 1.5rem;
-    background: #f1f5f9;
+    /*background: #f1f5f9;*/
     min-height: calc(100vh - 90px);
 }
 .page-link {
