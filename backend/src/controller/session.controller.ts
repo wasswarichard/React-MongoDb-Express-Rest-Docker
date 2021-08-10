@@ -6,6 +6,7 @@ import config from "config";
 
 export async function createUserSessionHandler(req: Request, res: Response) {
     // validate the email and password
+
     const user =  await validatePassword(req.body);
 
     if(!user){
@@ -25,6 +26,6 @@ export async function createUserSessionHandler(req: Request, res: Response) {
         expiresIn: config.get("refreshTokenTtl"), // 1 year
     });
 
-    // send refresh and access token back
-    return res.send({ accessToken, refreshToken });
+    // send refresh , access token and user details back
+    return res.send({ accessToken, refreshToken, user });
 }
