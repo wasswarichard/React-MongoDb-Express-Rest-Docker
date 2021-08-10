@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import { createServer } from "http";
 import { Server } from "socket.io";
 import config from 'config';
@@ -12,6 +13,7 @@ const port = config.get('port') as number;
 const host = config.get('host') as string;
 
 const app = express();
+app.use(cors())
 
 //
 // const httpServer = createServer(app);

@@ -14,13 +14,13 @@ const Layout =  ({children}) => {
 
     return (
         <>
-            {/*<LoginForm/>*/}
+            <LoginForm/>
             {/*<SignUpForm/>*/}
-            <Navbar/>
-            <Sidebar/>
-            <div id="content" className={!isNavbarVisible ? "active" : ""}>
-                {children}
-            </div>
+            {/*<Navbar/>*/}
+            {/*<Sidebar/>*/}
+            {/*<div id="content" className={!isNavbarVisible ? "active" : ""}>*/}
+            {/*    {children}*/}
+            {/*</div>*/}
         </>
     )
 }
