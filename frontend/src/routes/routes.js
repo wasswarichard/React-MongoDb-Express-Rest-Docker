@@ -1,8 +1,10 @@
 import Blocks from "../components/Blocks/Blocks";
 import Todos from "../components/Todos/Todos";
+import LoginForm from "../components/LoginForm/LoginForm";
+import SignUpForm from "../components/SignUpForm/SignUpForm";
 
 const routes = [
-   {
+    {
         enabled: true,
         path: "/task1",
         link: "/task1",

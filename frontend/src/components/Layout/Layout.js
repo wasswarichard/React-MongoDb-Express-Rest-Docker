@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
+import {BrowserRouter as Router, Route} from 'react-router-dom'
 import { withRouter } from "react-router-dom";
 import ReactGA from "react-ga";
 import Navbar from "../Navbar/Navbar";
 import Sidebar from "../Sidebar/Sidebar";
-import LoginForm from "../LoginForm/LoginForm";
-import SignUpForm from "../SignUpForm/SignUpForm";
 const Layout =  ({children}) => {
     const isNavbarVisible = true;
     useEffect(() => {
@@ -14,13 +13,11 @@ const Layout =  ({children}) => {
 
     return (
         <>
-            <LoginForm/>
-            {/*<SignUpForm/>*/}
-            {/*<Navbar/>*/}
-            {/*<Sidebar/>*/}
-            {/*<div id="content" className={!isNavbarVisible ? "active" : ""}>*/}
-            {/*    {children}*/}
-            {/*</div>*/}
+            <Navbar/>
+            <Sidebar/>
+            <div id="content" className={!isNavbarVisible ? "active" : ""}>
+                {children}
+            </div>
         </>
     )
 }
