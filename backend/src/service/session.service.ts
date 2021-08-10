@@ -21,3 +21,24 @@ export function createAccessToken({user, session,}: {
         {expiresIn: config.get("accessTokenTtl")} // 15 minutes
     );
 }
+
+export async function reIssueAccessToken({refreshToken,}: { refreshToken: string; }) {
+    // Decode the refresh token
+    const { decoded } = decode(refreshToken);
+    if (!decoded || !get(decoded, "_id")) return false;
+
+    // Get the session
+    const session = await Session.findById(get(decoded, "_id"));
+
+    // Make sure the session is still valid
+    if (!session || !session?.valid) return false;
+
+    const user = await findUser({ _id: session.user });
+    if (!user) return false;
+
+    return createAccessToken({user, session});
+}
+
+export async function updateSession(query: FilterQuery<SessionDocument>, update: UpdateQuery<SessionDocument>) {
+    return Session.updateOne(query, update);
+}

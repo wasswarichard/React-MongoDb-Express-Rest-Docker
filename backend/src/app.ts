@@ -5,7 +5,7 @@ import config from 'config';
 import log from "./logger";
 import connect from "./db/connect";
 import routes from "./routes/routes";
-// import {deserializeUser} from "./middleware";
+import { deserializeUser } from "./middleware";
 // import socket from "./socket";
 
 const port = config.get('port') as number;
@@ -23,7 +23,7 @@ const app = express();
 //     },
 // });
 
-// app.use(deserializeUser);
+app.use(deserializeUser);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
