@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes'
 
-export default function sessionReducer (state = {}, action) {
+export default function sessionReducer (state = { loggedIn: false}, action) {
     switch (action.type) {
         case types.ADD_SESSION:
             return {

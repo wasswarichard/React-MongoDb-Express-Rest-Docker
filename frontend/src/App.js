@@ -8,18 +8,12 @@ import Layout from "./components/Layout/Layout";
 import Blocks from "./components/Blocks/Blocks";
 import SignUpForm from "./components/SignUpForm/SignUpForm";
 import LoginForm from "./components/LoginForm/LoginForm";
-
-const test = true;
+const loginStatus = store.getState().session.loggedIn;
 
 const  App = () => (
     <Provider store={store}>
         {
-            test ? (
-                <Router>
-                    <Route path='/' exact component={LoginForm}/>
-                    <Route path='/signup' component={SignUpForm}/>
-                </Router>
-            ) : (
+            loginStatus ? (
                 <Router>
                     <Layout>
                         <Suspense fallback={<div> Loading...</div>}>
@@ -35,6 +29,11 @@ const  App = () => (
                             </Switch>
                         </Suspense>
                     </Layout>
+                </Router>
+            ) : (
+                <Router>
+                    <Route path='/' exact component={LoginForm}/>
+                    <Route path='/signup' component={SignUpForm}/>
                 </Router>
             )
         }
