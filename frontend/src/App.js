@@ -5,10 +5,10 @@ import { store } from "./state/store/store";
 import routes from "./routes/routes";
 import "./App.css"
 import Layout from "./components/Layout/Layout";
-import Blocks from "./components/Blocks/Blocks";
 import SignUpForm from "./components/SignUpForm/SignUpForm";
 import LoginForm from "./components/LoginForm/LoginForm";
 import {addSession} from "./state/actions/sessionActions";
+import Todos from "./components/Todos/Todos";
 
 const  App = () => {
     const isAuthenticated = localStorage.getItem('session');
@@ -28,7 +28,7 @@ const  App = () => {
                                             key={route.path}
                                         />
                                     ))}
-                                    <Route path="/" exact component={Blocks}/>
+                                    <Route path="/" exact component={Todos}/>
                                 </Switch>
                             </Suspense>
                         </Layout>
