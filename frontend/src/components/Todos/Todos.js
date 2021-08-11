@@ -11,6 +11,7 @@ import {
   Checkbox,
 } from "@material-ui/core";
 import config from '../../helpers/config.json'
+import {store} from "../../state/store/store";
 
 const useStyles = makeStyles({
   addTodoContainer: { padding: 10 },
@@ -18,7 +19,7 @@ const useStyles = makeStyles({
   todosContainer: { marginTop: 10, padding: 10 },
   todoContainer: {
     borderTop: "1px solid #bfbfbf",
-    marginTop: 5,
+    marginTop: 2,
     "&:first-child": {
       margin: 0,
       borderTop: "none",
@@ -38,28 +39,46 @@ const useStyles = makeStyles({
 });
 
 function Todos() {
+  const authentication = JSON.parse(localStorage.getItem('session'));
   const classes = useStyles();
   const [todos, setTodos] = useState([]);
   const [newTodoText, setNewTodoText] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
   useEffect(() => {
-    fetch(`${config.apiUrl}/`)
-      .then((response) => response.json())
-      .then((todos) => setTodos(todos));
-  }, [setTodos]);
-
-  function addTodo(text) {
-    fetch(`${config.apiUrl}/`, {
+    fetch(`${config.apiUrl}/api/todos`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "authorization": authentication.accessToken,
+        "x-refresh": authentication.refreshToken
       },
-      method: "POST",
-      body: JSON.stringify({ text }),
     })
       .then((response) => response.json())
-      .then((todo) => setTodos([...todos, todo]));
-    setNewTodoText("");
+      .then((todos) => {
+        console.log(todos)
+        setTodos(todos)
+      });
+  }, [setTodos]);
+
+  function addTodo(text) {
+    fetch(`${config.apiUrl}/api/todo`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "authorization": authentication.accessToken,
+        "x-refresh": authentication.refreshToken
+      },
+      method: "POST",
+      body: JSON.stringify({ text, dueDate }),
+    })
+      .then((response) => response.json())
+      .then((todo) => {
+        setTodos([...todos, todo])
+        setNewTodoText("");
+        setDueDate("")
+      });
+
   }
 
   function toggleTodoCompleted(id) {
@@ -93,35 +112,35 @@ function Todos() {
       <div className="main-content">
         <main>
           <Container maxWidth="md">
-            <Typography variant="h3" component="h1" gutterBottom>
+            <Typography variant="h5" component="h1" gutterBottom>
               Todos
             </Typography>
             <Paper className={classes.addTodoContainer}>
               <Box display="flex" flexDirection="row">
-                <Box flexGrow={1}>
-                  <TextField fullWidth value={newTodoText} onKeyPress={(event) => {
-                        if (event.key === "Enter") {
-                          addTodo(newTodoText);
-                        }
-                      }}
+                <Box flexGrow={2}>
+                  <TextField
+                      required
+                      fullWidth
+                      value={newTodoText}
                       onChange={(event) => setNewTodoText(event.target.value)}
                   />
+                  <TextField
+                      required
+                      label="Due Date"
+                      type="date"
+                      value={dueDate}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      defaultValue="2021-05-24"
+                      onChange={event => setDueDate(event.target.value)}
+                  />
                 </Box>
-
-                <TextField
-                    id="date"
-                    label="Birthday"
-                    type="date"
-                    defaultValue="2017-05-24"
-                    className={classes.textField}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                />
-
                 <Button className={classes.addTodoButton} startIcon={<Icon>add</Icon>} onClick={() => addTodo(newTodoText)}>Add</Button>
               </Box>
             </Paper>
+
+
             {todos.length > 0 && (
                 <Paper className={classes.todosContainer}>
                   <Box display="flex" flexDirection="column" alignItems="stretch">

@@ -3,26 +3,22 @@ import profilePicture from "../../images/richard.jpg"
 import 'bootstrap/dist/css/bootstrap.css';
 import "./Navbar.css"
 import Grid from "@material-ui/core/Grid";
-import axios from "axios";
 import config from "../../helpers/config.json";
 
 const Navbar = () => {
     const logout = (event) => {
         const authentication = JSON.parse(localStorage.getItem('session'));
-        axios.post(`${config.apiUrl}/api/removesession`, {
-            user: authentication.user,
-            session: authentication.session
-        }, {
+        fetch(`${config.apiUrl}/api/removesession`, {
             headers: {
-                accessToken: authentication.accessToken,
-                refreshToken: authentication.refreshToken
-            }
+                authorization: authentication.accessToken,
+                "x-refresh": authentication.refreshToken
+            },
+            method: "POST",
         }).then(response => {
-            if (response.data){
+            if (response.status === 200) {
                 localStorage.removeItem('session');
                 window.location.href = '/';
             }
-
         })
     }
     return (

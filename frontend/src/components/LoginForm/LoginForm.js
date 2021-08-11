@@ -47,7 +47,7 @@ export default function LoginForm() {
             store.dispatch(addSession({...response.data}))
             if(response.status === 200) {
                 localStorage.setItem('session', JSON.stringify({...response.data, loggedIn: true}));
-                window.location.reload();
+                window.location.href = '/';
             }
         })
     }

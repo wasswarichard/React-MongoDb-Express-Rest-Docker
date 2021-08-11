@@ -32,7 +32,7 @@ export async function createUserSessionHandler(req: Request, res: Response) {
 }
 
 export async function invalidateUserSessionHandler(req: Request, res: Response) {
-    const sessionId = get(req, "body.session._id");
+    const sessionId = get(req, "user.session");
     await updateSession({ _id: sessionId }, { valid: false });
     return res.sendStatus(200);
 }

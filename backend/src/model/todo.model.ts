@@ -20,6 +20,18 @@ const TodoSchema = new mongoose.Schema(
             unique: true,
             default: () => nanoid(10),
         },
+        status: {
+            type: String,
+            required: true
+        },
+        dueDate: {
+            type: Date,
+            required: true
+        },
+        text: {
+            type: String,
+            required: true
+        },
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     },
     {
