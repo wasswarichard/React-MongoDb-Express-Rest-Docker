@@ -1,7 +1,7 @@
 export default {
-    port: 3001,
+    port: process.env.NODE_ENV === 'development' ? 3001 : process.env.PORT,
     host: 'localhost',
-    dbUrl: 'mongodb://localhost:27017/todos',
+    dbUrl: process.env.NODE_ENV === 'development' ? 'mongodb://localhost:27017/todos' : process.env.DATABASE_URL,
     saltWorkFactor: 10,
     accessTokenTtl: "30m",
     refreshTokenTtl: "1y",
