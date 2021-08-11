@@ -28,11 +28,11 @@ export async function createUserSessionHandler(req: Request, res: Response) {
     });
 
     // send refresh , access token and user details back
-    return res.send({ accessToken, refreshToken, user });
+    return res.send({ accessToken, refreshToken, user, session });
 }
 
 export async function invalidateUserSessionHandler(req: Request, res: Response) {
-    const sessionId = get(req, "user.session");
+    const sessionId = get(req, "body.session._id");
     await updateSession({ _id: sessionId }, { valid: false });
     return res.sendStatus(200);
 }

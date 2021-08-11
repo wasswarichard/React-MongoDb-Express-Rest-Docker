@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from "axios";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import config from '../../helpers/config.json'
+import { store } from "../../state/store/store";
+import {addSession} from "../../state/actions/sessionActions";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -36,43 +39,18 @@ export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // function toggleTodoCompleted(id) {
-    //     fetch(`${config.apiUrl}/${id}`, {
-    //         headers: {
-    //             Accept: "application/json",
-    //             "Content-Type": "application/json",
-    //         },
-    //         method: "PUT",
-    //         body: JSON.stringify({
-    //             completed: !todos.find((todo) => todo.id === id).completed,
-    //         }),
-    //     }).then(() => {
-    //         const newTodos = [...todos];
-    //         const modifiedTodoIndex = newTodos.findIndex((todo) => todo.id === id);
-    //         newTodos[modifiedTodoIndex] = {
-    //             ...newTodos[modifiedTodoIndex],
-    //             completed: !newTodos[modifiedTodoIndex].completed,
-    //         };
-    //         setTodos(newTodos);
-    //     });
-    // }
-
     const handleSubmit = event => {
         event.preventDefault();
-        fetch(`${config.apiUrl}/api/session`, {
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            method: "POST",
-            body: JSON.stringify({
-                email, password
-            })
+        axios.post(`${config.apiUrl}/api/session`, {
+            email, password
         }).then(response => {
-            console.log(response)
+            store.dispatch(addSession({...response.data}))
+            if(response.status === 200) {
+                localStorage.setItem('session', JSON.stringify({...response.data, loggedIn: true}));
+                window.location.reload();
+            }
         })
     }
-
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />

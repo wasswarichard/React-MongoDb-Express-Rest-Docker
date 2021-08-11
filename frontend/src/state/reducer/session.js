@@ -1,10 +1,15 @@
 import * as types from '../actions/actionTypes'
 
-export default function sessionReducer (state = { loggedIn: false}, action) {
+export default function sessionReducer (state = { isAuthenticated: false}, action) {
     switch (action.type) {
         case types.ADD_SESSION:
+            if(action.session) {
+                console.log((action.session));
+            }
             return {
-                ...state
+                ...state,
+                ...action.session,
+                isAuthenticated: true
             };
         case types.DELETE_SESSION:
             return {};
