@@ -101,15 +101,6 @@ function Todos() {
     }).then(() => setTodos(todos.filter((todo) => todo.id !== id)));
   }
 
-  // const fetchMoreTodos = () => {
-  //   setTimeout(() => {
-  //     setTodos({
-  //       todos: todos.concat(Array.from(({length: 5})))
-  //     })
-  //
-  //   }, 1500)
-  // }
-
   return (
       <div className="main-content">
         <main>
@@ -119,7 +110,10 @@ function Todos() {
             </Typography>
             <Typography>
               <label>Search</label>
-              <input type="date" value={dueDate} onChange={(event) => setQuery(event.target.value)}/>
+              <input type="date" value={query} onChange={(event) => {
+                setQuery(event.target.value)
+                setPageNumber(1);
+              }}/>
             </Typography>
 
             <Paper className={classes.addTodoContainer}>
@@ -187,35 +181,6 @@ function Todos() {
             )}
             <div>{loading && 'Loading...'}</div>
             <div>{error && 'Error'}</div>
-
-            {/*<InfiniteScroll*/}
-            {/*    dataLength={todos.length}*/}
-            {/*    next={fetchMoreTodos}*/}
-            {/*    hasMore={true}*/}
-            {/*    loader={<h4>Loading...</h4>}*/}
-            {/*>*/}
-            {/*  {todos.length > 0 && (*/}
-            {/*      <Paper className={classes.todosContainer}>*/}
-            {/*        <Box display="flex" flexDirection="column" alignItems="stretch">*/}
-            {/*          {todos.map(({ todoId, text, completed }) => (*/}
-            {/*              <Box key={todoId} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>*/}
-            {/*                <Checkbox checked={completed} onChange={() => toggleTodoCompleted(todoId)}/>*/}
-            {/*                <Box flexGrow={1}>*/}
-            {/*                  <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">*/}
-            {/*                    {text}*/}
-            {/*                  </Typography>*/}
-            {/*                </Box>*/}
-            {/*                <Button className={classes.deleteTodo} startIcon={<Icon>delete</Icon>} onClick={() => deleteTodo(todoId)}>*/}
-            {/*                  Delete*/}
-            {/*                </Button>*/}
-            {/*              </Box>*/}
-            {/*          ))}*/}
-            {/*        </Box>*/}
-            {/*      </Paper>*/}
-            {/*  )}*/}
-
-            {/*</InfiniteScroll>*/}
-
           </Container>
         </main>
       </div>
