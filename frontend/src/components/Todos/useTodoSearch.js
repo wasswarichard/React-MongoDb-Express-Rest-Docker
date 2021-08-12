@@ -5,11 +5,11 @@ const useTodoSearch = (query, pageNumber) => {
     const authentication = JSON.parse(localStorage.getItem('session'));
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const [todos, setTodos] = useState([]);
+    const [todosItems, setTodosItems] = useState([]);
     const [hasMore, setHasMore] = useState(false);
 
     useEffect(() => {
-        setTodos([])
+        setTodosItems([])
     }, [query]);
 
     useEffect(() => {
@@ -19,7 +19,7 @@ const useTodoSearch = (query, pageNumber) => {
         axios({
             method: 'GET',
             url: `${config.apiUrl}/api/todos`,
-            params: {q: query, page: pageNumber, limit: 20},
+            params: {dueDate: query, page: pageNumber, limit: 20},
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -30,7 +30,7 @@ const useTodoSearch = (query, pageNumber) => {
 
         })
             .then(response => {
-                setTodos( prevTodos => {
+                setTodosItems( prevTodos => {
                     return [...new Set([...prevTodos, ...response.data.todos])]
                 })
                 setHasMore(response.data.todos.length > 0);
@@ -44,6 +44,6 @@ const useTodoSearch = (query, pageNumber) => {
         return () => cancel();
     }, [query, pageNumber])
 
-    return {loading, error, todos, hasMore}
+    return {loading, error, todosItems, hasMore}
 }
 export default useTodoSearch;

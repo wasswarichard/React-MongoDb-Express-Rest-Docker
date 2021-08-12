@@ -34,11 +34,15 @@ const useStyles = makeStyles({
 function Todos() {
   const authentication = JSON.parse(localStorage.getItem('session'));
   const classes = useStyles();
-  const [newTodoText, setNewTodoText] = useState("");
+  const [text, setText] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [query, setQuery]  = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const { todos, hasMore, error, loading } = useTodoSearch(query, pageNumber);
+  const { todosItems, hasMore, error, loading } = useTodoSearch(query, pageNumber);
+  const [todos, setTodos] = useState([])
+  useEffect(() => {
+    setTodos(todosItems)
+  }, [todosItems])
 
   const observer = useRef();
 
@@ -54,7 +58,7 @@ function Todos() {
   }, [loading, hasMore])
 
 
-  function addTodo(text) {
+  function addTodo() {
     fetch(`${config.apiUrl}/api/todo`, {
       headers: {
         Accept: "application/json",
@@ -67,7 +71,7 @@ function Todos() {
     })
       .then((response) => response.json())
       .then((todo) => {
-        setTodos([...todos, todo])
+        // setTodos([...todos, todo])
         // setNewTodoText("");
         // setDueDate("")
       });
@@ -123,8 +127,8 @@ function Todos() {
                       required
                       label="text"
                       fullWidth
-                      value={newTodoText}
-                      onChange={(event) => setNewTodoText(event.target.value)}
+                      value={text}
+                      onChange={(event) => setText(event.target.value)}
                   />
                   <TextField
                       required
@@ -138,17 +142,22 @@ function Todos() {
                       onChange={event => setDueDate(event.target.value)}
                   />
                 </Box>
-                <Button className={classes.addTodoButton} startIcon={<Icon>add</Icon>} onClick={() => addTodo(newTodoText)}>Add</Button>
+                <Button className={classes.addTodoButton} startIcon={<Icon>add</Icon>} onClick={() => addTodo()}>Add</Button>
               </Box>
             </Paper>
             {todos.length > 0 && (
                 <Paper className={classes.todosContainer}>
                   <Box display="flex" flexDirection="column" alignItems="stretch">
-                    {todos.map(({ _id, text, completed }, index) => {
+                    {todos.map(({ _id, text, completed, dueDate }, index) => {
                       if(todos.length === index + 1) {
                         return (
                             <Box ref={lastTodoElementRef} key={_id} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>
                               <Checkbox checked={completed} onChange={() => toggleTodoCompleted(_id)}/>
+                              <Box flexGrow={1}>
+                                <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
+                                  {text}
+                                </Typography>
+                              </Box>
                               <Box flexGrow={1}>
                                 <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
                                   {text}
@@ -166,6 +175,11 @@ function Todos() {
                               <Box flexGrow={1}>
                                 <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
                                   {text}
+                                </Typography>
+                              </Box>
+                              <Box flexGrow={1}>
+                                <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
+                                  { `Due Date:  ${new Date(dueDate).toLocaleDateString()}`}
                                 </Typography>
                               </Box>
                               <Button className={classes.deleteTodo} startIcon={<Icon>delete</Icon>} onClick={() => deleteTodo(_id)}>

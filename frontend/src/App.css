@@ -24,7 +24,7 @@
 main {
     margin-top: 10px;
     padding: 2rem 1.5rem;
-    /*background: #f1f5f9;*/
+    background: #f1f5f9;
     min-height: calc(100vh - 90px);
 }
 .page-link {

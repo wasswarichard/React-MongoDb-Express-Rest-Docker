@@ -28,6 +28,7 @@ export async function updateTodoHandler(req: Request, res: Response) {
 
 export async function getTodoHandler(req: Request, res: Response) {
     const page = parseInt(<string>req.query.page)
+    const dueDate = req.query.dueDate
     const limit = parseInt(<string>req.query.limit)
     const startIndex = (page - 1) * limit
     const endIndex = (page * limit)
@@ -35,6 +36,11 @@ export async function getTodoHandler(req: Request, res: Response) {
     if(!todos){
         return res.sendStatus(401)
     }
+    const filteredTodos = dueDate ? todos.filter((todo: { dueDate: Date; }) => {
+        // @ts-ignore
+        return new Date(todo.dueDate).getTime() === new Date(dueDate).getTime()
+    }) : todos
+
     const results =  {
         todos: [],
         next: {},
@@ -52,7 +58,7 @@ export async function getTodoHandler(req: Request, res: Response) {
             limit: limit
         }
     }
-    results.todos = todos.slice(startIndex, endIndex);
+    results.todos = filteredTodos.slice(startIndex, endIndex);
     return  res.send(results)
 
 }
