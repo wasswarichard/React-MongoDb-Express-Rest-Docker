@@ -25,12 +25,35 @@ export async function updateTodoHandler(req: Request, res: Response) {
 
 }
 
+
 export async function getTodoHandler(req: Request, res: Response) {
+    const page = parseInt(<string>req.query.page)
+    const limit = parseInt(<string>req.query.limit)
+    const startIndex = (page - 1) * limit
+    const endIndex = (page * limit)
     const todos =  await findAllTodo();
     if(!todos){
         return res.sendStatus(401)
     }
-    return  res.send(todos)
+    const results =  {
+        todos: [],
+        next: {},
+        previous: {}
+    };
+    if (endIndex < todos.length){
+        results.next = {
+            page: page + 1,
+            limit: limit
+        }
+    }
+    if (startIndex > 0){
+        results.previous = {
+            page: page - 1,
+            limit: limit
+        }
+    }
+    results.todos = todos.slice(startIndex, endIndex);
+    return  res.send(results)
 
 }
 

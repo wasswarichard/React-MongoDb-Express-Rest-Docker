@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useRef, useCallback} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Container,
-  Typography,
-  Button,
-  Icon,
-  Paper,
-  Box,
-  TextField,
-  Checkbox,
-} from "@material-ui/core";
+import InfiniteScroll from "react-infinite-scroll-component";
+import {Container, Typography, Button, Icon, Paper, Box, TextField, Checkbox,} from "@material-ui/core";
 import config from '../../helpers/config.json'
 import {store} from "../../state/store/store";
+import useTodoSearch from "./useTodoSearch";
 
 const useStyles = makeStyles({
   addTodoContainer: { padding: 10 },
@@ -41,25 +34,25 @@ const useStyles = makeStyles({
 function Todos() {
   const authentication = JSON.parse(localStorage.getItem('session'));
   const classes = useStyles();
-  const [todos, setTodos] = useState([]);
   const [newTodoText, setNewTodoText] = useState("");
   const [dueDate, setDueDate] = useState("");
+  const [query, setQuery]  = useState('');
+  const [pageNumber, setPageNumber] = useState(1);
+  const { todos, hasMore, error, loading } = useTodoSearch(query, pageNumber);
 
-  useEffect(() => {
-    fetch(`${config.apiUrl}/api/todos`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "authorization": authentication.accessToken,
-        "x-refresh": authentication.refreshToken
-      },
+  const observer = useRef();
+
+  const lastTodoElementRef = useCallback(node => {
+    if (loading) return
+    if (observer.current) observer.current.disconnect()
+    observer.current = new IntersectionObserver(entries => {
+      if(entries[0].isIntersecting && hasMore){
+        setPageNumber(prevPageNumber => prevPageNumber + 1)
+      }
     })
-      .then((response) => response.json())
-      .then((todos) => {
-        console.log(todos)
-        setTodos(todos)
-      });
-  }, [setTodos]);
+    if (node) observer.current.observe(node)
+  }, [loading, hasMore])
+
 
   function addTodo(text) {
     fetch(`${config.apiUrl}/api/todo`, {
@@ -75,8 +68,8 @@ function Todos() {
       .then((response) => response.json())
       .then((todo) => {
         setTodos([...todos, todo])
-        setNewTodoText("");
-        setDueDate("")
+        // setNewTodoText("");
+        // setDueDate("")
       });
 
   }
@@ -108,6 +101,15 @@ function Todos() {
     }).then(() => setTodos(todos.filter((todo) => todo.id !== id)));
   }
 
+  // const fetchMoreTodos = () => {
+  //   setTimeout(() => {
+  //     setTodos({
+  //       todos: todos.concat(Array.from(({length: 5})))
+  //     })
+  //
+  //   }, 1500)
+  // }
+
   return (
       <div className="main-content">
         <main>
@@ -115,11 +117,17 @@ function Todos() {
             <Typography variant="h5" component="h1" gutterBottom>
               Todos
             </Typography>
+            <Typography>
+              <label>Search</label>
+              <input type="date" value={dueDate} onChange={(event) => setQuery(event.target.value)}/>
+            </Typography>
+
             <Paper className={classes.addTodoContainer}>
               <Box display="flex" flexDirection="row">
                 <Box flexGrow={2}>
                   <TextField
                       required
+                      label="text"
                       fullWidth
                       value={newTodoText}
                       onChange={(event) => setNewTodoText(event.target.value)}
@@ -139,27 +147,75 @@ function Todos() {
                 <Button className={classes.addTodoButton} startIcon={<Icon>add</Icon>} onClick={() => addTodo(newTodoText)}>Add</Button>
               </Box>
             </Paper>
-
-
             {todos.length > 0 && (
                 <Paper className={classes.todosContainer}>
                   <Box display="flex" flexDirection="column" alignItems="stretch">
-                    {todos.map(({ id, text, completed }) => (
-                        <Box key={id} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>
-                          <Checkbox checked={completed} onChange={() => toggleTodoCompleted(id)}/>
-                          <Box flexGrow={1}>
-                            <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
-                              {text}
-                            </Typography>
-                          </Box>
-                          <Button className={classes.deleteTodo} startIcon={<Icon>delete</Icon>} onClick={() => deleteTodo(id)}>
-                            Delete
-                          </Button>
-                        </Box>
-                    ))}
+                    {todos.map(({ _id, text, completed }, index) => {
+                      if(todos.length === index + 1) {
+                        return (
+                            <Box ref={lastTodoElementRef} key={_id} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>
+                              <Checkbox checked={completed} onChange={() => toggleTodoCompleted(_id)}/>
+                              <Box flexGrow={1}>
+                                <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
+                                  {text}
+                                </Typography>
+                              </Box>
+                              <Button className={classes.deleteTodo} startIcon={<Icon>delete</Icon>} onClick={() => deleteTodo(_id)}>
+                                Delete
+                              </Button>
+                            </Box>
+                        )
+                      } else {
+                        return (
+                            <Box key={_id} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>
+                              <Checkbox checked={completed} onChange={() => toggleTodoCompleted(_id)}/>
+                              <Box flexGrow={1}>
+                                <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
+                                  {text}
+                                </Typography>
+                              </Box>
+                              <Button className={classes.deleteTodo} startIcon={<Icon>delete</Icon>} onClick={() => deleteTodo(_id)}>
+                                Delete
+                              </Button>
+                            </Box>
+                        )
+                      }
+
+                    })}
                   </Box>
                 </Paper>
             )}
+            <div>{loading && 'Loading...'}</div>
+            <div>{error && 'Error'}</div>
+
+            {/*<InfiniteScroll*/}
+            {/*    dataLength={todos.length}*/}
+            {/*    next={fetchMoreTodos}*/}
+            {/*    hasMore={true}*/}
+            {/*    loader={<h4>Loading...</h4>}*/}
+            {/*>*/}
+            {/*  {todos.length > 0 && (*/}
+            {/*      <Paper className={classes.todosContainer}>*/}
+            {/*        <Box display="flex" flexDirection="column" alignItems="stretch">*/}
+            {/*          {todos.map(({ todoId, text, completed }) => (*/}
+            {/*              <Box key={todoId} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>*/}
+            {/*                <Checkbox checked={completed} onChange={() => toggleTodoCompleted(todoId)}/>*/}
+            {/*                <Box flexGrow={1}>*/}
+            {/*                  <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">*/}
+            {/*                    {text}*/}
+            {/*                  </Typography>*/}
+            {/*                </Box>*/}
+            {/*                <Button className={classes.deleteTodo} startIcon={<Icon>delete</Icon>} onClick={() => deleteTodo(todoId)}>*/}
+            {/*                  Delete*/}
+            {/*                </Button>*/}
+            {/*              </Box>*/}
+            {/*          ))}*/}
+            {/*        </Box>*/}
+            {/*      </Paper>*/}
+            {/*  )}*/}
+
+            {/*</InfiniteScroll>*/}
+
           </Container>
         </main>
       </div>

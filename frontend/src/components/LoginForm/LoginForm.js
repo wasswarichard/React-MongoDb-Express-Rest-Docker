@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(8),
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     avatar: {
         margin: theme.spacing(1),
@@ -52,7 +52,7 @@ export default function LoginForm() {
         })
     }
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" style={{backgroundColor: "rgb(236 239 241)"}}>
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon --config nodemon.json src/app.ts",
+    "dev": "nodemon --config nodemon.json src/index.ts",
     "start": "npx nodemon bin/www"
   },
   "dependencies": {
