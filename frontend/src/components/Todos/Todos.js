@@ -1,10 +1,10 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import InfiniteScroll from "react-infinite-scroll-component";
 import {Container, Typography, Button, Icon, Paper, Box, TextField, Checkbox,} from "@material-ui/core";
 import config from '../../helpers/config.json'
-import {store} from "../../state/store/store";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import useTodoSearch from "./useTodoSearch";
+import TodoItem from "./TodoItem";
 
 const useStyles = makeStyles({
   addTodoContainer: { padding: 10 },
@@ -45,7 +45,6 @@ function Todos() {
   }, [todosItems])
 
   const observer = useRef();
-
   const lastTodoElementRef = useCallback(node => {
     if (loading) return
     if (observer.current) observer.current.disconnect()
@@ -57,6 +56,13 @@ function Todos() {
     if (node) observer.current.observe(node)
   }, [loading, hasMore])
 
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+    const items = Array.from(todos);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setTodos(items);
+  }
 
   function addTodo() {
     fetch(`${config.apiUrl}/api/todo`, {
@@ -69,12 +75,12 @@ function Todos() {
       method: "POST",
       body: JSON.stringify({ text, dueDate }),
     })
-      .then((response) => response.json())
-      .then((todo) => {
-        // setTodos([...todos, todo])
-        // setNewTodoText("");
-        // setDueDate("")
-      });
+        .then((response) => response.json())
+        .then((todo) => {
+          // setTodos([...todos, todo])
+          // setNewTodoText("");
+          // setDueDate("")
+        });
 
   }
 
@@ -104,7 +110,6 @@ function Todos() {
       method: "DELETE",
     }).then(() => setTodos(todos.filter((todo) => todo.id !== id)));
   }
-
   return (
       <div className="main-content">
         <main>
@@ -119,7 +124,6 @@ function Todos() {
                 setPageNumber(1);
               }}/>
             </Typography>
-
             <Paper className={classes.addTodoContainer}>
               <Box display="flex" flexDirection="row">
                 <Box flexGrow={2}>
@@ -145,54 +149,39 @@ function Todos() {
                 <Button className={classes.addTodoButton} startIcon={<Icon>add</Icon>} onClick={() => addTodo()}>Add</Button>
               </Box>
             </Paper>
-            {todos.length > 0 && (
-                <Paper className={classes.todosContainer}>
-                  <Box display="flex" flexDirection="column" alignItems="stretch">
-                    {todos.map(({ _id, text, completed, dueDate }, index) => {
-                      if(todos.length === index + 1) {
-                        return (
-                            <Box ref={lastTodoElementRef} key={_id} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>
-                              <Checkbox checked={completed} onChange={() => toggleTodoCompleted(_id)}/>
-                              <Box flexGrow={1}>
-                                <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
-                                  {text}
-                                </Typography>
-                              </Box>
-                              <Box flexGrow={1}>
-                                <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
-                                  {text}
-                                </Typography>
-                              </Box>
-                              <Button className={classes.deleteTodo} startIcon={<Icon>delete</Icon>} onClick={() => deleteTodo(_id)}>
-                                Delete
-                              </Button>
-                            </Box>
-                        )
-                      } else {
-                        return (
-                            <Box key={_id} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>
-                              <Checkbox checked={completed} onChange={() => toggleTodoCompleted(_id)}/>
-                              <Box flexGrow={1}>
-                                <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
-                                  {text}
-                                </Typography>
-                              </Box>
-                              <Box flexGrow={1}>
-                                <Typography className={completed ? classes.todoTextCompleted : ""} variant="body1">
-                                  { `Due Date:  ${new Date(dueDate).toLocaleDateString()}`}
-                                </Typography>
-                              </Box>
-                              <Button className={classes.deleteTodo} startIcon={<Icon>delete</Icon>} onClick={() => deleteTodo(_id)}>
-                                Delete
-                              </Button>
-                            </Box>
-                        )
-                      }
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+              <Droppable droppableId="characters">
+                { (provided) => (
+                    <ul className={classes.todosContainer} {...provided.droppableProps} ref={provided.innerRef}>
+                      {todos.map(({ _id, text, completed, dueDate }, index) => {
+                        if (todos.length === index + 1){
+                          return (
+                              <Draggable ref={lastTodoElementRef} key={_id} draggableId={_id} index={index}>
+                                {(provided) => (
+                                    <li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={classes.todoContainer}>
+                                      <TodoItem _id={_id} classes={classes} text={text} completed={completed} dueDate={dueDate} lastTodoElementRef={lastTodoElementRef}/>
+                                    </li>
+                                )}
+                              </Draggable>
+                          )
+                        } else {
+                          return (
+                              <Draggable key={_id} draggableId={_id} index={index}>
+                                {(provided) => (
+                                    <li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={classes.todoContainer}>
+                                      <TodoItem _id={_id} classes={classes} text={text} completed={completed} dueDate={dueDate}/>
+                                    </li>
+                                )}
+                              </Draggable>
+                          )
+                        }
 
-                    })}
-                  </Box>
-                </Paper>
-            )}
+                      })}
+                      {provided.placeholder}
+                    </ul>
+                )}
+              </Droppable>
+            </DragDropContext>
             <div>{loading && 'Loading...'}</div>
             <div>{error && 'Error'}</div>
           </Container>

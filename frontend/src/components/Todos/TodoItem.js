@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Container, Typography, Button, Icon, Paper, Box, TextField, Checkbox,} from "@material-ui/core";
-const TodoItem = ({_id, classes, text, completed, dueDate}) => {
+const TodoItem = ({_id, classes, text, completed, dueDate, lastTodoElementRef}) => {
     const deleteTodo = (_id) => {
 
     }
@@ -9,7 +9,7 @@ const TodoItem = ({_id, classes, text, completed, dueDate}) => {
     }
 
     return (
-        <Paper>
+        <Paper ref={lastTodoElementRef} key={_id} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>
             <Box display="flex" flexDirection="row" alignItems="center">
                 <Checkbox checked={completed} onChange={() => toggleTodoCompleted(_id)}/>
                 <Box flexGrow={1}>
