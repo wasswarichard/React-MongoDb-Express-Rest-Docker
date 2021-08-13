@@ -6,7 +6,6 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import useTodoSearch from "./useTodoSearch";
 import TodoItem from "./TodoItem";
 import {store} from "../../state/store/store";
-import {addTodos} from "../../state/actions/TodosActions";
 
 const useStyles = makeStyles({
   addTodoContainer: { padding: 10 },
@@ -72,7 +71,7 @@ function Todos() {
     setTodos(items);
   }
 
-  function addTodo() {
+  function addNewTodo() {
     fetch(`${config.apiUrl}/api/todo`, {
       headers: {
         Accept: "application/json",
@@ -85,7 +84,7 @@ function Todos() {
     })
         .then((response) => response.json())
         .then((todo) => {
-          store.dispatch(addTodos(todo));
+          setTodos([todo, ...todos])
           setText("");
           setDueDate("")
         });
@@ -128,7 +127,7 @@ function Todos() {
                       onChange={event => setDueDate(event.target.value)}
                   />
                 </Box>
-                <Button className={classes.addTodoButton} startIcon={<Icon>add</Icon>} onClick={() => addTodo()}>Add</Button>
+                <Button className={classes.addTodoButton} startIcon={<Icon>add</Icon>} onClick={() => addNewTodo()}>Add</Button>
               </Box>
             </Paper>
             <DragDropContext onDragEnd={handleOnDragEnd}>

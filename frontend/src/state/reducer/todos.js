@@ -22,9 +22,9 @@ export default function todosReducer (state = [], action) {
             }
             return newTodos
         case types.Filter_TODOS:
-            console.log(state);
-
             return []
+        case types.ADD_TODO:
+            return [action.todo , ...state]
         default:
             return state
 
