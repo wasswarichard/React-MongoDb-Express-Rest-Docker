@@ -9,8 +9,6 @@ import {store} from "../../state/store/store";
 const Navbar = () => {
     const authentication = store.getState().session
     const logout = () => {
-
-        console.log(authentication);
         fetch(`${config.apiUrl}/api/session`, {
             headers: {
                 authorization: authentication.accessToken,

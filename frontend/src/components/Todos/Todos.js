@@ -40,7 +40,7 @@ function Todos() {
   const [dueDate, setDueDate] = useState("");
   const [query, setQuery]  = useState('');
   const [pageNumber, setPageNumber] = useState(1);
-  const { todosItems, hasMore, error, loading } = useTodoSearch(query, pageNumber);
+  const { todosItems, hasMore, loading } = useTodoSearch(query, pageNumber);
   const [todos, setTodos] = useState([])
   const [valueChange, setValueChange] = useState(1);
 
@@ -165,7 +165,6 @@ function Todos() {
               </Droppable>
             </DragDropContext>
             <div>{loading && 'Loading...'}</div>
-            <div>{error && 'Error'}</div>
           </Container>
         </main>
       </div>

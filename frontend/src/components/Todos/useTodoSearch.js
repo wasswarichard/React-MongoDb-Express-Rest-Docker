@@ -2,11 +2,10 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import config from "../../helpers/config.json";
 import {store} from "../../state/store/store";
-import {addTodos, filterTodos} from "../../state/actions/TodosActions";
+import {addTodos} from "../../state/actions/TodosActions";
 const useTodoSearch = (query, pageNumber) => {
     const authentication = store.getState().session
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [todosItems, setTodosItems] = useState([]);
     const [hasMore, setHasMore] = useState(false);
 
@@ -16,7 +15,6 @@ const useTodoSearch = (query, pageNumber) => {
 
     useEffect(() => {
         setLoading(true);
-        setError(false);
         let cancel;
         axios({
             method: 'GET',
@@ -47,13 +45,15 @@ const useTodoSearch = (query, pageNumber) => {
                 setLoading(false)
             })
             .catch(error => {
+                setLoading(false)
                 if (axios.isCancel(error)) return
-                setError(true)
+                localStorage.removeItem('session');
+                window.location.href = '/';
             })
 
         return () => cancel();
     }, [query, pageNumber])
 
-    return {loading, error, todosItems, hasMore}
+    return {loading, todosItems, hasMore}
 }
 export default useTodoSearch;

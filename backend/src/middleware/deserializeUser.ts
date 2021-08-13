@@ -8,6 +8,7 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
     const refreshToken = get(req, "headers.x-refresh");
     if (!accessToken) return next();
     const { decoded, expired } = decode(accessToken);
+
     if (decoded) {
         // @ts-ignore
         req.user = decoded;
@@ -23,7 +24,7 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
             // @ts-ignore
             req.user = decoded;
         }
-        return next();
+        return res.sendStatus(403);
     }
 
     return next();

@@ -18,10 +18,13 @@ const TodoItem = ({todo, lastTodoElementRef, classes, setValueChange}) => {
             },
             method: "DELETE",
         }).then((response) => {
-            if(response.status === 200){
-                setValueChange(Math.random() * 100)
-                store.dispatch(deleteTodos(todo))
+            if(response.status === 403){
+                localStorage.removeItem('session');
+                window.location.href = '/';
             }
+            setValueChange(Math.random() * 100)
+            store.dispatch(deleteTodos(todo))
+
         })
     }
     function toggleTodoCompleted(todo) {
@@ -37,12 +40,14 @@ const TodoItem = ({todo, lastTodoElementRef, classes, setValueChange}) => {
                 ...todo,
                 completed: !todo.completed
             }),
-        })
-            .then(response => response.json())
-            .then((todo) => {
+        }).then(response => {
+                if (response.status === 403){
+                    localStorage.removeItem('session');
+                    window.location.href = '/';
+                }
                 setValueChange(Math.random() * 100)
                 store.dispatch(updateTodos(todo));
-        });
+        })
     }
 
     return (
