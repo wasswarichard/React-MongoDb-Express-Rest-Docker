@@ -9,6 +9,7 @@ export interface TodoDocument extends mongoose.Document{
     status: string,
     createdAt: Date,
     updatedAt: Date,
+    completed: Boolean
 
 }
 
@@ -30,6 +31,10 @@ const TodoSchema = new mongoose.Schema(
         },
         text: {
             type: String,
+            required: true
+        },
+        completed: {
+            type: Boolean,
             required: true
         },
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},

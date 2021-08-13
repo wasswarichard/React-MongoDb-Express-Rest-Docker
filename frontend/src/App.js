@@ -1,4 +1,4 @@
-import React, {Suspense, useEffect, useState} from 'react';
+import React, {Suspense} from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import {Provider} from "react-redux";
 import { store } from "./state/store/store";
@@ -12,7 +12,7 @@ import Todos from "./components/Todos/Todos";
 
 const  App = () => {
     const isAuthenticated = localStorage.getItem('session');
-    store.dispatch(addSession(isAuthenticated));
+    store.dispatch(addSession(JSON.parse(localStorage.getItem('session'))));
     return (
         <Provider store={store}>
             {

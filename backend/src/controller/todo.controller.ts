@@ -6,23 +6,19 @@ export async function createTodoHandler(req: Request, res: Response){
     const userId = get(req, "user._id");
     const body = req.body;
 
-    const Todo = await createTodo({...body, user: userId, status: "SELECTION"})
+    const Todo = await createTodo({...body, user: userId, status: "SELECTION", completed: false})
     return res.send(Todo);
 }
 
 export async function updateTodoHandler(req: Request, res: Response) {
-    const todoId = get(req, 'user.todoId');
-    const update = req.body;
-
+    const todoId = get(req, 'body.todoId');
+    const requestBody = req.body;
     const todo = await findTodo({todoId});
-
     if(!todo){
         return res.sendStatus(404)
     }
-    const updatedTodo = await findAndUpdate({todoId}, update, {new: true});
-
+    const updatedTodo = await findAndUpdate({todoId}, requestBody, {new: true});
     return res.send(updatedTodo)
-
 }
 
 
@@ -40,7 +36,6 @@ export async function getTodoHandler(req: Request, res: Response) {
         // @ts-ignore
         return new Date(todo.dueDate).getTime() === new Date(dueDate).getTime()
     }) : todos
-
     const results =  {
         todos: [],
         next: {},

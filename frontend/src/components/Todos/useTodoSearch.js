@@ -1,15 +1,17 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import config from "../../helpers/config.json";
+import {store} from "../../state/store/store";
+import {addTodos} from "../../state/actions/TodosActions";
 const useTodoSearch = (query, pageNumber) => {
-    const authentication = JSON.parse(localStorage.getItem('session'));
+    const authentication = store.getState().session
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [todosItems, setTodosItems] = useState([]);
     const [hasMore, setHasMore] = useState(false);
 
     useEffect(() => {
-        setTodosItems([])
+        setTodosItems([]);
     }, [query]);
 
     useEffect(() => {
@@ -33,6 +35,7 @@ const useTodoSearch = (query, pageNumber) => {
                 setTodosItems( prevTodos => {
                     return [...new Set([...prevTodos, ...response.data.todos])]
                 })
+                store.dispatch(addTodos(response.data.todos));
                 setHasMore(response.data.todos.length > 0);
                 setLoading(false)
             })

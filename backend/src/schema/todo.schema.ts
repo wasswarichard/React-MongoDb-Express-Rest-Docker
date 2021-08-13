@@ -10,7 +10,7 @@ const payload = {
 const params = {
     params: object({
         todoId: string().required('todoId is required'),
-        status: string().required('status is required')
+        // status: string().required('status is required')
     })
 }
 

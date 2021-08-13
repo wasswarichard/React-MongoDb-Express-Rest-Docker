@@ -1,10 +1,12 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import {Container, Typography, Button, Icon, Paper, Box, TextField, Checkbox,} from "@material-ui/core";
+import {Container, Typography, Button, Icon, Paper, Box, TextField} from "@material-ui/core";
 import config from '../../helpers/config.json'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import useTodoSearch from "./useTodoSearch";
 import TodoItem from "./TodoItem";
+import {store} from "../../state/store/store";
+import {addTodos} from "../../state/actions/TodosActions";
 
 const useStyles = makeStyles({
   addTodoContainer: { padding: 10 },
@@ -32,7 +34,7 @@ const useStyles = makeStyles({
 });
 
 function Todos() {
-  const authentication = JSON.parse(localStorage.getItem('session'));
+  const authentication = store.getState().session
   const classes = useStyles();
   const [text, setText] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -40,9 +42,11 @@ function Todos() {
   const [pageNumber, setPageNumber] = useState(1);
   const { todosItems, hasMore, error, loading } = useTodoSearch(query, pageNumber);
   const [todos, setTodos] = useState([])
+  const [valueChange, setValueChange] = useState(1);
+
   useEffect(() => {
-    setTodos(todosItems)
-  }, [todosItems])
+    setTodos(store.getState().todos)
+  }, [store.getState().todos, valueChange])
 
   const observer = useRef();
   const lastTodoElementRef = useCallback(node => {
@@ -77,39 +81,13 @@ function Todos() {
     })
         .then((response) => response.json())
         .then((todo) => {
-          // setTodos([...todos, todo])
-          // setNewTodoText("");
-          // setDueDate("")
+          store.dispatch(addTodos(todo));
+          setText("");
+          setDueDate("")
         });
-
   }
 
-  function toggleTodoCompleted(id) {
-    fetch(`${config.apiUrl}/${id}`, {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-      body: JSON.stringify({
-        completed: !todos.find((todo) => todo.id === id).completed,
-      }),
-    }).then(() => {
-      const newTodos = [...todos];
-      const modifiedTodoIndex = newTodos.findIndex((todo) => todo.id === id);
-      newTodos[modifiedTodoIndex] = {
-        ...newTodos[modifiedTodoIndex],
-        completed: !newTodos[modifiedTodoIndex].completed,
-      };
-      setTodos(newTodos);
-    });
-  }
 
-  function deleteTodo(id) {
-    fetch(`${config.apiUrl}/${id}`, {
-      method: "DELETE",
-    }).then(() => setTodos(todos.filter((todo) => todo.id !== id)));
-  }
   return (
       <div className="main-content">
         <main>
@@ -153,23 +131,23 @@ function Todos() {
               <Droppable droppableId="characters">
                 { (provided) => (
                     <ul className={classes.todosContainer} {...provided.droppableProps} ref={provided.innerRef}>
-                      {todos.map(({ _id, text, completed, dueDate }, index) => {
+                      {todos.map((todo, index) => {
                         if (todos.length === index + 1){
                           return (
-                              <Draggable ref={lastTodoElementRef} key={_id} draggableId={_id} index={index}>
+                              <Draggable key={todo._id} draggableId={todo._id} index={index}>
                                 {(provided) => (
                                     <li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={classes.todoContainer}>
-                                      <TodoItem _id={_id} classes={classes} text={text} completed={completed} dueDate={dueDate} lastTodoElementRef={lastTodoElementRef}/>
+                                      <TodoItem todo={todo} classes={classes} lastTodoElementRef={lastTodoElementRef} setValueChange={setValueChange}/>
                                     </li>
                                 )}
                               </Draggable>
                           )
                         } else {
                           return (
-                              <Draggable key={_id} draggableId={_id} index={index}>
+                              <Draggable key={todo._id} draggableId={todo._id} index={index}>
                                 {(provided) => (
                                     <li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={classes.todoContainer}>
-                                      <TodoItem _id={_id} classes={classes} text={text} completed={completed} dueDate={dueDate}/>
+                                      <TodoItem todo={todo} classes={classes} setValueChange={setValueChange}/>
                                     </li>
                                 )}
                               </Draggable>
