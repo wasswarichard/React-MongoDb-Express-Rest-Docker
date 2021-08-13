@@ -11,12 +11,12 @@ const Navbar = () => {
     const logout = () => {
 
         console.log(authentication);
-        fetch(`${config.apiUrl}/api/removesession`, {
+        fetch(`${config.apiUrl}/api/session`, {
             headers: {
                 authorization: authentication.accessToken,
                 "x-refresh": authentication.refreshToken
             },
-            method: "POST",
+            method: "DELETE",
         }).then(response => {
             if (response.status === 200) {
                 localStorage.removeItem('session');

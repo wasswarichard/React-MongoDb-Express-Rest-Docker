@@ -24,7 +24,7 @@ export default function (app: Express){
     app.post('/api/session', validateRequest(createUserSessionSchema), createUserSessionHandler);
 
     // logout user
-    app.post('/api/removesession', requiresUser, invalidateUserSessionHandler);
+    app.delete('/api/session', requiresUser, invalidateUserSessionHandler);
 
     // Create todos
     app.post('/api/todo', [requiresUser, validateRequest(createTodoSchema)], createTodoHandler);
