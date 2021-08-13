@@ -33,7 +33,7 @@ export default function (app: Express){
     app.put('/api/todo/:todoId', [requiresUser, validateRequest(updateTodoSchema)], updateTodoHandler);
 
     // Get todos
-    app.get('/api/todos', getTodoHandler);
+    app.get('/api/todos', requiresUser, getTodoHandler);
 
     // Delete todo
     app.delete('/api/todo/:todoId', [requiresUser, validateRequest(deleteTodoSchema)], deleteTodoHandler)

@@ -7,8 +7,10 @@ import config from "../../helpers/config.json";
 import {store} from "../../state/store/store";
 
 const Navbar = () => {
+    const authentication = store.getState().session
     const logout = () => {
-        const authentication = store.getState().session
+
+        console.log(authentication);
         fetch(`${config.apiUrl}/api/removesession`, {
             headers: {
                 authorization: authentication.accessToken,
@@ -34,7 +36,7 @@ const Navbar = () => {
                 <div className="user-wrapper">
                     <img src={profilePicture} width="40px" height="40px" alt=""/>
                     <div>
-                        <h5> Richard W</h5>
+                        <h5> {authentication.user.name}</h5>
                         <small> Super admin</small>
                     </div>
                     <div className="user-logout">
