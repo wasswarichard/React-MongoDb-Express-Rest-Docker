@@ -4,10 +4,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import "./Navbar.css"
 import Grid from "@material-ui/core/Grid";
 import config from "../../helpers/config.json";
+import {store} from "../../state/store/store";
 
 const Navbar = () => {
-    const logout = (event) => {
-        const authentication = JSON.parse(localStorage.getItem('session'));
+    const logout = () => {
+        const authentication = store.getState().session
         fetch(`${config.apiUrl}/api/removesession`, {
             headers: {
                 authorization: authentication.accessToken,
