@@ -20,3 +20,10 @@ export const deleteTodos = todos => {
         todos
     }
 }
+
+export const filterTodos = todos => {
+    return {
+        type: actions.Filter_TODOS,
+        todos
+    }
+}

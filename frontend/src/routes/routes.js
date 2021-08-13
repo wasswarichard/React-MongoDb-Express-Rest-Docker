@@ -1,4 +1,4 @@
-import Blocks from "../components/Blocks/Blocks";
+import Blocks from "../components/TodoTable/TodoTable";
 import Todos from "../components/Todos/Todos";
 import LoginForm from "../components/LoginForm/LoginForm";
 import SignUpForm from "../components/SignUpForm/SignUpForm";

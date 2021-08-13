@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Blocks from "../Blocks";
+import Blocks from "../TodoTable";
 import { render, cleanup} from "@testing-library/react";
 import TestRenderer from 'react-test-renderer';
 

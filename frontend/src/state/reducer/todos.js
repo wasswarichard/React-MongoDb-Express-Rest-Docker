@@ -21,6 +21,10 @@ export default function todosReducer (state = [], action) {
                 completed: !newTodos[modifiedTodoIndex].completed
             }
             return newTodos
+        case types.Filter_TODOS:
+            console.log(state);
+
+            return []
         default:
             return state
 

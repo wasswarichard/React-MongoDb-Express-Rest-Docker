@@ -48,6 +48,10 @@ function Todos() {
     setTodos(store.getState().todos)
   }, [store.getState().todos, valueChange])
 
+  useEffect(() => {
+   setTodos(todosItems)
+  }, [todosItems, query])
+
   const observer = useRef();
   const lastTodoElementRef = useCallback(node => {
     if (loading) return

@@ -39,7 +39,9 @@ export async function getTodoHandler(req: Request, res: Response) {
     const results =  {
         todos: [],
         next: {},
-        previous: {}
+        previous: {},
+        totalRecords: undefined
+
     };
     if (endIndex < todos.length){
         results.next = {
@@ -53,6 +55,7 @@ export async function getTodoHandler(req: Request, res: Response) {
             limit: limit
         }
     }
+    results.totalRecords = filteredTodos.length;
     results.todos = filteredTodos.slice(startIndex, endIndex);
     return  res.send(results)
 
