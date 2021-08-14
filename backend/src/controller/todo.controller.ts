@@ -56,7 +56,7 @@ export async function getTodoHandler(req: Request, res: Response) {
         }
     }
     results.totalRecords = filteredTodos.length;
-    results.todos = filteredTodos.slice(startIndex, endIndex);
+    results.todos = filteredTodos.reverse().slice(startIndex, endIndex);
     return  res.send(results)
 
 }

@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    error: {
+        color: "red",
+    }
 }));
 
 export default function SignUpForm() {
@@ -39,14 +42,16 @@ export default function SignUpForm() {
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState(null);
 
     const handleSubmit = event => {
         event.preventDefault();
         axios.post(`${config.apiUrl}/api/user`, {
             name, email, password, confirmPassword
         }).then(response => {
+            setError(null)
             window.location.href = '/';
-        })
+        }).catch(error => setError(error.response.data))
     }
 
     return (
@@ -60,6 +65,7 @@ export default function SignUpForm() {
                     Sign up
                 </Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>
+                    {error && (<div><span className={classes.error}>{error}</span></div>)}
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField

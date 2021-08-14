@@ -32,12 +32,17 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    error: {
+        color: "red",
+        marginLeft: "50px"
+    }
 }));
 
 export default function LoginForm() {
     const classes = useStyles();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(null);
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -46,10 +51,11 @@ export default function LoginForm() {
         }).then(response => {
             store.dispatch(addSession({...response.data}))
             if(response.status === 200) {
+                setError(null)
                 localStorage.setItem('session', JSON.stringify({...response.data, loggedIn: true}));
                 window.location.href = '/';
             }
-        })
+        }).catch(error => setError(error.response.data))
     }
     return (
         <Container component="main" maxWidth="xs" style={{backgroundColor: "rgb(236 239 241)"}}>
@@ -62,6 +68,7 @@ export default function LoginForm() {
                     Sign in
                 </Typography>
                 <form className={classes.form} onSubmit={handleSubmit}>
+                    {error && (<div><span className={classes.error}>{error}</span></div>)}
                     <TextField
                         variant="outlined"
                         margin="normal"

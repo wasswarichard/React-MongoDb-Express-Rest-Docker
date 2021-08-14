@@ -12,11 +12,11 @@ import { deserializeUser } from "./middleware";
 const port = config.get('port') as number;
 const host = config.get('host') as string;
 
-const index = express();
-index.use(cors())
+const app = express();
+app.use(cors())
 
 //
-// const httpServer = createServer(index);
+// const httpServer = createServer(app);
 //
 // const io = new Server(httpServer, {
 //     cors: {
@@ -25,15 +25,15 @@ index.use(cors())
 //     },
 // });
 
-index.use(deserializeUser);
+app.use(deserializeUser);
 
-index.use(express.json());
-index.use(express.urlencoded({extended: false}));
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 
-index.listen(port, host, () => {
+app.listen(port, host, () => {
     connect();
     log.info(`Server listening at http://${host}:${port}`);
-    routes(index);
+    routes(app);
 
     // socket({ io });
 })
