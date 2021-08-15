@@ -1,1 +1,1 @@
-export const apiUrl = `https://${location.hostname}:3001`;
+export const apiUrl = `https://localhost:3001`;
