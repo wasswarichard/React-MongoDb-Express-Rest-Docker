@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon --config nodemon.json src/index.ts",
-    "start": "npx nodemon bin/www"
+    "start": "nodemon --config nodemon.json src/index.ts"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",

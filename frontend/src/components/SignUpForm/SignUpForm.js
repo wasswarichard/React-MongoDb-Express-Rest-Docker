@@ -10,8 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import axios from "axios";
-import config from "../../helpers/config.json";
-import {addSession} from "../../state/actions/sessionActions";
+import * as config from '../../helpers/config'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

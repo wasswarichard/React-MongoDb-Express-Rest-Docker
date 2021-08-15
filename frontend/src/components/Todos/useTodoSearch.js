@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import config from "../../helpers/config.json";
+import * as config from '../../helpers/config'
 import {store} from "../../state/store/store";
 import {addTodos} from "../../state/actions/TodosActions";
 const useTodoSearch = (query, pageNumber) => {

@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React from "react";
 import {Typography, Button, Icon, Paper, Box, Checkbox,} from "@material-ui/core";
-import config from "../../helpers/config.json";
+import * as config from '../../helpers/config'
 import {store} from "../../state/store/store";
 import {updateTodos} from "../../state/actions/TodosActions";
 import {deleteTodos} from "../../state/actions/TodosActions";

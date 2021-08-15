@@ -10,9 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-import config from '../../helpers/config.json'
 import { store } from "../../state/store/store";
 import {addSession} from "../../state/actions/sessionActions";
+import * as config from '../../helpers/config'
 
 const useStyles = makeStyles((theme) => ({
     paper: {

@@ -3,7 +3,7 @@ import profilePicture from "../../images/richard.jpg"
 import 'bootstrap/dist/css/bootstrap.css';
 import "./Navbar.css"
 import Grid from "@material-ui/core/Grid";
-import config from "../../helpers/config.json";
+import * as config from '../../helpers/config'
 import {store} from "../../state/store/store";
 
 const Navbar = () => {

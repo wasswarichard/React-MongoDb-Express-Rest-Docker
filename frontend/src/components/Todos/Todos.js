@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useRef, useCallback} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {Container, Typography, Button, Icon, Paper, Box, TextField} from "@material-ui/core";
-import config from '../../helpers/config.json'
+import * as config from '../../helpers/config'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import useTodoSearch from "./useTodoSearch";
 import TodoItem from "./TodoItem";

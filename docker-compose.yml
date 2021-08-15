@@ -1,34 +1,44 @@
 version: "3"
 services:
   frontend:
-    build: frontend
+    image: frontend
+    build: ./frontend/
+    stdin_open: true
     depends_on:
       - api
-    tty: true
-    volumes:
-      - ./frontend/public:/frontend/public:cached,ro
-      - ./frontend/src:/frontend/src:cached,ro
     ports:
       - "3000:3000"
-
-  api:
-    build: backend
-    depends_on:
-      - database
-    tty: true
+    networks:
+      -  mern-app
     volumes:
-      - ./backend/bin:/backend/bin:cached,ro
-      - ./backend/src:/backend/src:cached,ro
+    - ./frontend/:/frontend
+    - /frontend/node_modules
+  api:
+    image: api
+    build: ./backend/
+    depends_on:
+      - mongo
     ports:
       - "3001:3001"
-    environment:
-      DATABASE_USER: "root"
-      DATABASE_PASSWORD: "1234"
-
-  database:
+    networks:
+      - mern-app
+    volumes:
+      - ./backend/:/backend
+      - /backend/node_modules
+  mongo:
     image: mongo:4.4
     ports:
       - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: "root"
-      MONGO_INITDB_ROOT_PASSWORD: "1234"
+    networks:
+      - mern-app
+    volumes:
+      - mongo-data:/data/db
+networks:
+  mern-app:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local
+
+
