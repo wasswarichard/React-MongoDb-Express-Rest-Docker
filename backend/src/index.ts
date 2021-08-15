@@ -5,6 +5,7 @@ import log from "./logger";
 import connect from "./db/connect";
 import routes from "./routes/routes";
 import { deserializeUser } from "./middleware";
+const http = require('http');
 
 const port = config.get('port') as number;
 const host = config.get('host') as string;
@@ -17,8 +18,10 @@ app.use(deserializeUser);
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.listen(port, host, () => {
-    connect();
-    log.info(`Server listening at http://${host}:${port}`);
-    routes(app);
-})
+connect();
+routes(app);
+
+const server = http.createServer(app);
+server.listen(port, () => {
+    console.log(`Backend Server running on http://${host}:${port} ...`)
+});
