@@ -3,8 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import {Container, Typography, Button, Icon, Paper, Box, TextField} from "@material-ui/core";
 import * as config from '../../helpers/config'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import useTodoSearch from "./useTodoSearch";
-import TodoItem from "./TodoItem";
+import useTodoSearch from "../useTodoSearch/useTodoSearch";
+import TodoItem from "../TodoItems/TodoItem";
 import {store} from "../../state/store/store";
 import {addTodo} from "../../state/actions/TodosActions";
 
