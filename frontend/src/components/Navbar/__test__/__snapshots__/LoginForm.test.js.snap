@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should match snapshot 1`] = `
+<div
+  className="main-content"
+>
+  <header>
+    <h2>
+      <label
+        htmlFor="nav-toggle"
+      >
+        <span
+          className="las la-bars"
+        />
+      </label>
+      Dashboard
+    </h2>
+    <div
+      className="user-wrapper"
+    >
+      <img
+        alt=""
+        height="40px"
+        src="richard.jpg"
+        width="40px"
+      />
+      <div>
+        <small>
+           Super admin
+        </small>
+      </div>
+      <div
+        className="user-logout"
+      >
+        <div
+          className="MuiGrid-root MuiGrid-container"
+        >
+          <div
+            className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-true"
+          >
+            <a
+              className="logout"
+              onClick={[Function]}
+            >
+              log out
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+`;

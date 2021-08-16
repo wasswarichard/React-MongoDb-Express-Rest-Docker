@@ -52,7 +52,6 @@ export default function StickyHeadTable() {
     };
 
     return (
-
         <div className="main-content">
             <main>
                 <h2>Todos</h2>

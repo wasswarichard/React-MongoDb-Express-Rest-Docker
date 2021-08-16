@@ -34,7 +34,9 @@ const Navbar = () => {
                 <div className="user-wrapper">
                     <img src={profilePicture} width="40px" height="40px" alt=""/>
                     <div>
-                        <h5> {authentication.user.name}</h5>
+                        {
+                            authentication.user && <h5> {authentication.user.name}</h5>
+                        }
                         <small> Super admin</small>
                     </div>
                     <div className="user-logout">

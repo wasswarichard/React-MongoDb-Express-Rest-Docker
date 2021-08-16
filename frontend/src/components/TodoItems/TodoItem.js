@@ -4,10 +4,31 @@ import * as config from '../../helpers/config'
 import {store} from "../../state/store/store";
 import {updateTodos} from "../../state/actions/TodosActions";
 import {deleteTodos} from "../../state/actions/TodosActions";
+import {makeStyles} from "@material-ui/core/styles";
 
-const TodoItem = ({todo, lastTodoElementRef, classes, setValueChange}) => {
+const useStyles = makeStyles((theme) => ({
+    todoContainer: {
+        borderTop: "1px solid #bfbfbf",
+        marginTop: 2,
+        "&:first-child": {
+            margin: 0,
+            borderTop: "none",
+        },
+        "&:hover": {
+            "& $deleteTodo": {
+                visibility: "visible",
+            },
+        },
+    },
+    deleteTodo: {
+        visibility: "hidden",
+    },
+}));
+
+
+const TodoItem = ({todo, lastTodoElementRef, setValueChange}) => {
+    const classes = useStyles();
     const authentication = store.getState().session
-
     function deleteTodo(todo) {
         fetch(`${config.apiUrl}/api/todo/${todo.todoId}`, {
             headers: {
@@ -51,7 +72,7 @@ const TodoItem = ({todo, lastTodoElementRef, classes, setValueChange}) => {
     }
 
     return (
-        <Paper ref={lastTodoElementRef} key={todo._id} display="flex" flexDirection="row" alignItems="center" className={classes.todoContainer}>
+        <Paper ref={lastTodoElementRef} key={todo._id} display="flex"  className={classes.todoContainer}>
             <Box display="flex" flexDirection="row" alignItems="center">
                 <Checkbox checked={todo.completed} onChange={() => toggleTodoCompleted(todo)}/>
                 <Box flexGrow={1}>

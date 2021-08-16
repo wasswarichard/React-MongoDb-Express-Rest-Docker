@@ -165,7 +165,7 @@ function Todos() {
                               <Draggable key={todo._id} draggableId={todo._id} index={index}>
                                 {(provided) => (
                                     <li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={classes.todoContainer}>
-                                      <TodoItem todo={todo} classes={classes} lastTodoElementRef={lastTodoElementRef} setValueChange={setValueChange}/>
+                                      <TodoItem todo={todo} lastTodoElementRef={lastTodoElementRef} setValueChange={setValueChange}/>
                                     </li>
                                 )}
                               </Draggable>
@@ -175,7 +175,7 @@ function Todos() {
                               <Draggable key={todo._id} draggableId={todo._id} index={index}>
                                 {(provided) => (
                                     <li {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} className={classes.todoContainer}>
-                                      <TodoItem todo={todo} classes={classes} setValueChange={setValueChange}/>
+                                      <TodoItem todo={todo} setValueChange={setValueChange}/>
                                     </li>
                                 )}
                               </Draggable>
