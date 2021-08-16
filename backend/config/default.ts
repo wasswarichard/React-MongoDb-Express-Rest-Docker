@@ -1,7 +1,7 @@
 export default {
     port: 3001,
     host: 'localhost',
-    dbUrl: 'mongodb://mongo:27017/todos',
+    dbUrl: 'mongodb://root:1234@database/',
     saltWorkFactor: 10,
     accessTokenTtl: "30m",
     refreshTokenTtl: "1y",
