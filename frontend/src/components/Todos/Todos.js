@@ -6,6 +6,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import useTodoSearch from "./useTodoSearch";
 import TodoItem from "./TodoItem";
 import {store} from "../../state/store/store";
+import {addTodo} from "../../state/actions/TodosActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,6 +96,7 @@ function Todos() {
         .then((response) => response.json())
         .then((todo) => {
           setTodos([todo, ...todos])
+          store.dispatch(addTodo(todo))
           setText("");
           setDueDate("")
         });
